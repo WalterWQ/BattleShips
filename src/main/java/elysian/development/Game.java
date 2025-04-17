@@ -39,8 +39,8 @@ public class Game {
         int[] gridSize = Utils.getGridSize(selectedDifficulty);
         System.out.println("Grid Size: " + gridSize[0] + "x" + gridSize[1]);
 
-        Board playerBoard = new Board(gridSize[0], gridSize[1]);
-        Board enemyBoard = new Board(gridSize[0], gridSize[1]);
+        Board playerBoard = new Board(selectedDifficulty);
+        Board enemyBoard = new Board(selectedDifficulty);
 
         Class playerClass = new Class(selectedClass);
 
@@ -50,6 +50,6 @@ public class Game {
     }
 
     public static void startGame(Board playerBoard, Board enemyBoard, Class playerClass) {
-
+        playerBoard.printBoard(); // Optional, for sanity
     }
 }
