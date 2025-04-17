@@ -1,5 +1,6 @@
 package elysian.development;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -45,7 +46,7 @@ public class Game {
 
         // Place ships using class-defined fleets and validation
         Ships.placePlayerFleet(userInput, playerBoard, playerClass);
-        Ships.placeAIFleet(playerBoard, selectedDifficulty);
+        Ships.placeAIFleet(enemyBoard, selectedDifficulty);
 
         // Start game
         startGame(playerBoard, enemyBoard, playerClass);
@@ -66,17 +67,18 @@ public class Game {
 
         while (!gameOver) {
             System.out.println("\nPLAYER TURN");
+            playerBoard.printBoard();
             playerTurn(userInput, enemyBoard, playerClass);
 
-            if (allShipsSunk(enemyBoard)) {
+            if (allShipsSunk(enemyBoard, 'E')) {
                 System.out.println("YOU WIN!");
                 break;
             }
 
             System.out.println("AI TURN");
-            aiTurn(playerBoard, playerClass);
+            aiTurn(playerBoard);
 
-            if (allShipsSunk(playerBoard)) {
+            if (allShipsSunk(playerBoard, 'S')) {
                 System.out.println("AI WIN!");
                 break;
             }
@@ -84,6 +86,47 @@ public class Game {
     }
 
     public static void playerTurn(Scanner userInput, Board targetBoard, PlayerClass playerClass) {
-        System.out.println("Enter attack Row: ");
+
+        System.out.println("Enter attack row: ");
+        int row = userInput.nextInt() - 1;
+        System.out.println("Enter attack column: ");
+        int col = userInput.nextInt() - 1;
+
+        if (targetBoard.getGrid()[row][col] == 'E') {
+            System.out.println("HIT!");
+            targetBoard.getGrid()[row][col] = 'X';
+        } else {
+            System.out.println("MISS!");
+            targetBoard.getGrid()[row][col] = 'O';
+        }
+    }
+
+    public static void aiTurn(Board targetBoard) {
+        Random rand = new Random();
+        int row, col;
+
+        do {
+            row = rand.nextInt(targetBoard.getHeight());
+            col = rand.nextInt(targetBoard.getWidth());
+        } while (targetBoard.getGrid()[row][col] == 'X' || targetBoard.getGrid()[row][col] == 'O');
+
+        System.out.println("AI attacked row " + (row + 1) + ", column " + (col+1));
+
+        if (targetBoard.getGrid()[row][col] == 'S') {
+            System.out.println("HIT!");
+            targetBoard.getGrid()[row][col] = 'X';
+        } else {
+            System.out.println("MISS!");
+            targetBoard.getGrid()[row][col] = 'O';
+        }
+    }
+
+    public static boolean allShipsSunk(Board board, char symbol) {
+        for(char[] row : board.getGrid()) {
+            for (char tile : row) {
+                if (tile == symbol) return false;
+            }
+        }
+        return true;
     }
 }
