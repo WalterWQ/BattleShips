@@ -69,19 +69,12 @@ public class Board {
         }
     }
 
-    public boolean canPlaceShip(int row, int col, int length, boolean vertical) {
-        for (int i = 0; i < length; i++) {
-            int r = row + (vertical ? i : 0);
-            int c = col + (vertical ? 0 : i);
-
-            if (r >= height || c >= width || grid[r][c] != '~') {
-                return false; // out of grid or not water
-            }
-        }
-        return true;
-    }
 
     public void placeShip(int row, int col, int length, boolean vertical, char symbol) {
+        if (!canPlaceShip(row, col, length, vertical)) {
+            throw new IllegalStateException("Invalid ship placement attempted at: (" + row + "," + col + ")");
+        }
+
         for (int i = 0; i < length; i++) {
             int r = row + (vertical ? i : 0);
             int c = col + (vertical ? 0 : i);
@@ -89,31 +82,25 @@ public class Board {
         }
     }
 
-    public static void placeAIShip(Board board, int length, int difficulty) {
-        Random rand = new Random();
-        boolean placed = false;
-        int tries = 0;
+    public boolean canPlaceShip(int row, int col, int length, boolean vertical) {
+        for (int i = 0; i < length; i++) {
+            int r = row + (vertical ? i : 0);
+            int c = col + (vertical ? 0 : i);
 
-        while (!placed && tries < 500) {
-            boolean vertical = rand.nextBoolean();
-            int row = rand.nextInt(board.getHeight());
-            int col = rand.nextInt(board.getWidth());
-
-            if (difficulty >= 3) {
-                // Strategic for Hard+
-                // Cluster around center or edge, avoid corners
-                row = (int)(board.getHeight() * (0.25 + rand.nextDouble() * 0.5));
-                col = (int)(board.getWidth() * (0.25 + rand.nextDouble() * 0.5));
+            // Bounds check
+            if (r < 0 || r >= height || c < 0 || c >= width) {
+                return false;
             }
 
-            if (board.canPlaceShip(row, col, length, vertical)) {
-                board.placeShip(row, col, length, vertical, 'E'); // 'E' for enemy ship
-                placed = true;
-            } else {
-                tries++;
+            // Must be empty water
+            if (grid[r][c] != '~') {
+                return false;
             }
         }
+        return true;
     }
+
+
 
     public int getWidth() { return width; }
     public int getHeight() { return height; }

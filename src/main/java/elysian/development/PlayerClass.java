@@ -71,6 +71,21 @@ public class PlayerClass {
         }
     }
 
+    public int[] getFleet() {
+        switch (type) {
+            case STEALTH:
+                return new int[]{1}; // Small, sneaky ships
+            case HEAVY_DUTY:
+                return new int[]{3, 3, 3, 3, 3}; // Tank fleet
+            case FIGHTER:
+                return new int[]{4, 3, 3, 2, 2}; // Balanced attack fleet
+            case AIR_DEFENSE:
+                return new int[]{4, 3, 3, 2, 1}; // Mid-size with utility
+            default:
+                return new int[]{5, 4, 3, 3, 2}; // Fallback standard
+        }
+    }
+
     public ClassType getType() { return type; }
     public List<String> getShips() { return ships; }
     public List<Weapons> getWeapons() { return weapons; }

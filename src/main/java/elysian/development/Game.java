@@ -36,21 +36,18 @@ public class Game {
 
         System.out.println("-=-=-=LOADING GAME-=-=-=");
 
-        int[] gridSize = Utils.getGridSize(selectedDifficulty);
-        System.out.println("Grid Size: " + gridSize[0] + "x" + gridSize[1]);
-
+        // Generate boards based on difficulty
         Board playerBoard = new Board(selectedDifficulty);
         Board enemyBoard = new Board(selectedDifficulty);
 
+        // Create player class
         PlayerClass playerClass = new PlayerClass(selectedClass);
 
-        playerBoard.generateBoard(selectedDifficulty);
-        enemyBoard.generateBoard(selectedDifficulty);
+        // Place ships using class-defined fleets and validation
+        Ships.placePlayerFleet(userInput, playerBoard, playerClass);
+        Ships.placeAIFleet(playerBoard, selectedDifficulty);
 
-        Ships.placePlayerFleet(userInput, playerBoard);
-        Ships.placeAIFleet(enemyBoard, selectedDifficulty);
-
-
+        // Start game
         startGame(playerBoard, enemyBoard, playerClass);
 
 
@@ -58,6 +55,7 @@ public class Game {
 
     public static void startGame(Board playerBoard, Board enemyBoard, PlayerClass playerClass) {
         playerBoard.printBoard(); // Optional, for sanity
+
 
     }
 }

@@ -9,8 +9,6 @@ public class Ships {
     private int startX;
     private int startY;
 
-    int[] shipSizes = {5, 4, 3, 3, 2};
-
     public Ships(int length, boolean vertical, int startX, int startY) {
         this.length = length;
         this.vertical = vertical;
@@ -18,14 +16,15 @@ public class Ships {
         this.startY = startY;
     }
 
-    public static void placePlayerFleet(Scanner scanner, Board board) {
-        int[] shipSizes = {5, 4, 3, 3, 2};
 
-        for (int i = 0; i < shipSizes.length; i++) {
-            int shipLength = shipSizes[i];
-            System.out.println("Place ship of length " + shipLength);
-            placePlayerShip(scanner, board, shipLength);
-            board.printBoard(); // Optional: show progress
+    public static void placePlayerFleet(Scanner scanner, Board board, PlayerClass playerClass) {
+        int[] shipSizes = playerClass.getFleet();
+
+        for (int length : shipSizes) {
+            System.out.println("Place ship of length " + length);
+            board.printBoard(); // Optional for feedbackf
+            Ships.placePlayerShip(scanner, board, length);
+
         }
     }
 
@@ -43,45 +42,48 @@ public class Ships {
             boolean vertical = scanner.nextBoolean();
 
             if (board.canPlaceShip(row, col, length, vertical)) {
-                board.placeShip(row, col, length, vertical, 'S'); // 'S' for ship
+                board.placeShip(row, col, length, vertical, 'S');
                 placed = true;
+                board.printBoard(); // Optional: show after placing
             } else {
-                System.out.println("Invalid placement. Try again.");
+                System.out.println("Invalid position! That ship overlaps or is out of bounds. Try again.");
             }
         }
     }
 
     public static void placeAIFleet(Board board, int difficulty) {
-        int[] shipSizes = {5, 4, 3, 3, 2};
+        int aiClassId = new Random().nextInt(4) + 1;
+        PlayerClass aiClass = new PlayerClass(aiClassId);
 
-        for (int shipLength : shipSizes) {
-            placeAIShip(board, shipLength, difficulty);
+        System.out.println("AI has chosen class: " + aiClass.getType());
+
+        int[] shipSizes = aiClass.getFleet();
+
+        for (int length : shipSizes) {
+            Ships.placeAIShip(board, length, difficulty);
         }
     }
 
     public static void placeAIShip(Board board, int length, int difficulty) {
         Random rand = new Random();
         boolean placed = false;
-        int tries = 0;
+        int attempts = 0;
 
-        while (!placed && tries < 500) {
+        while (!placed && attempts < 500) {
             boolean vertical = rand.nextBoolean();
             int row = rand.nextInt(board.getHeight());
             int col = rand.nextInt(board.getWidth());
 
-            if (difficulty >= 3) {
-                // Strategic for Hard+
-                // Cluster around center or edge, avoid corners
-                row = (int)(board.getHeight() * (0.25 + rand.nextDouble() * 0.5));
-                col = (int)(board.getWidth() * (0.25 + rand.nextDouble() * 0.5));
-            }
-
             if (board.canPlaceShip(row, col, length, vertical)) {
-                board.placeShip(row, col, length, vertical, 'E'); // 'E' for enemy ship
+                board.placeShip(row, col, length, vertical, 'E');
                 placed = true;
             } else {
-                tries++;
+                attempts++;
             }
+        }
+
+        if (!placed) {
+            System.out.println("AI failed to place ship of length " + length);
         }
     }
 
