@@ -42,7 +42,9 @@ public class Game {
         Board playerBoard = new Board(gridSize[0], gridSize[1]);
         Board enemyBoard = new Board(gridSize[0], gridSize[1]);
 
-        //startGame(playerBoard, enemyBoard, selectedClass);
+        Class playerClass = new Class(selectedClass);
+
+        startGame(playerBoard, enemyBoard, playerClass);
 
 
     }
