@@ -8,12 +8,45 @@ public class Ships {
     private boolean vertical; // true = vertical, false = horizontal
     private int startX;
     private int startY;
+    private boolean[] hitSegments;
+    private String name;
 
-    public Ships(int length, boolean vertical, int startX, int startY) {
+    public Ships(String name, int length, boolean vertical, int startX, int startY) {
+        this.name = name;
         this.length = length;
         this.vertical = vertical;
         this.startX = startX;
         this.startY = startY;
+        this.hitSegments = new boolean[length];
+    }
+
+    public boolean isSunk() {
+        for (boolean hit : hitSegments) {
+            if(!hit) return false;
+        }
+        return true;
+    }
+
+    public void hit(int index) {
+        hitSegments[index] = true;
+    }
+
+    public boolean occupies(int row, int col) {
+        for (int i = 0; i < length; i++) {
+            int r = startX + (vertical ? i : 0);
+            int c = startY + (vertical ? 0 : i);
+            if (r == row && c == col) return true;
+        }
+        return false;
+    }
+
+    public int getIndex(int row, int col) {
+        for (int i = 0; i < length; i++) {
+            int r = startX + (vertical ? i : 0);
+            int c = startY + (vertical ? 0 : i);
+            if (r == row && c == col) return i;
+        }
+        return -1;
     }
 
 
@@ -87,6 +120,7 @@ public class Ships {
         }
     }
 
+    public String getName() { return name; }
     public int getLength() { return length; }
     public boolean isVertical() { return vertical; }
     public int getStartX() { return startX; }

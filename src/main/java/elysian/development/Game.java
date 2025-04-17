@@ -55,7 +55,35 @@ public class Game {
 
     public static void startGame(Board playerBoard, Board enemyBoard, PlayerClass playerClass) {
         playerBoard.printBoard(); // Optional, for sanity
+        fight(playerBoard, enemyBoard, playerClass);
 
 
+    }
+
+    public static void fight(Board playerBoard, Board enemyBoard, PlayerClass playerClass ) {
+       Scanner userInput = new Scanner(System.in);
+       boolean gameOver = false;
+
+        while (!gameOver) {
+            System.out.println("\nPLAYER TURN");
+            playerTurn(userInput, enemyBoard, playerClass);
+
+            if (allShipsSunk(enemyBoard)) {
+                System.out.println("YOU WIN!");
+                break;
+            }
+
+            System.out.println("AI TURN");
+            aiTurn(playerBoard, playerClass);
+
+            if (allShipsSunk(playerBoard)) {
+                System.out.println("AI WIN!");
+                break;
+            }
+        }
+    }
+
+    public static void playerTurn(Scanner userInput, Board targetBoard, PlayerClass playerClass) {
+        System.out.println("Enter attack Row: ");
     }
 }
