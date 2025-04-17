@@ -17,7 +17,7 @@ public class Board {
         generateBoard(difficulty);
     }
 
-    private void generateBoard(int difficulty) {
+    void generateBoard(int difficulty) {
         // Step 1: Fill the board with water
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
@@ -66,6 +66,52 @@ public class Board {
                 System.out.printf("%" + (colPadding + 1) + "s", grid[row][col]);
             }
             System.out.println();
+        }
+    }
+
+    public boolean canPlaceShip(int row, int col, int length, boolean vertical) {
+        for (int i = 0; i < length; i++) {
+            int r = row + (vertical ? i : 0);
+            int c = col + (vertical ? 0 : i);
+
+            if (r >= height || c >= width || grid[r][c] != '~') {
+                return false; // out of grid or not water
+            }
+        }
+        return true;
+    }
+
+    public void placeShip(int row, int col, int length, boolean vertical, char symbol) {
+        for (int i = 0; i < length; i++) {
+            int r = row + (vertical ? i : 0);
+            int c = col + (vertical ? 0 : i);
+            grid[r][c] = symbol;
+        }
+    }
+
+    public static void placeAIShip(Board board, int length, int difficulty) {
+        Random rand = new Random();
+        boolean placed = false;
+        int tries = 0;
+
+        while (!placed && tries < 500) {
+            boolean vertical = rand.nextBoolean();
+            int row = rand.nextInt(board.getHeight());
+            int col = rand.nextInt(board.getWidth());
+
+            if (difficulty >= 3) {
+                // Strategic for Hard+
+                // Cluster around center or edge, avoid corners
+                row = (int)(board.getHeight() * (0.25 + rand.nextDouble() * 0.5));
+                col = (int)(board.getWidth() * (0.25 + rand.nextDouble() * 0.5));
+            }
+
+            if (board.canPlaceShip(row, col, length, vertical)) {
+                board.placeShip(row, col, length, vertical, 'E'); // 'E' for enemy ship
+                placed = true;
+            } else {
+                tries++;
+            }
         }
     }
 

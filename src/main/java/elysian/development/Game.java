@@ -42,14 +42,22 @@ public class Game {
         Board playerBoard = new Board(selectedDifficulty);
         Board enemyBoard = new Board(selectedDifficulty);
 
-        Class playerClass = new Class(selectedClass);
+        PlayerClass playerClass = new PlayerClass(selectedClass);
+
+        playerBoard.generateBoard(selectedDifficulty);
+        enemyBoard.generateBoard(selectedDifficulty);
+
+        Ships.placePlayerFleet(userInput, playerBoard);
+        Ships.placeAIFleet(enemyBoard, selectedDifficulty);
+
 
         startGame(playerBoard, enemyBoard, playerClass);
 
 
     }
 
-    public static void startGame(Board playerBoard, Board enemyBoard, Class playerClass) {
+    public static void startGame(Board playerBoard, Board enemyBoard, PlayerClass playerClass) {
         playerBoard.printBoard(); // Optional, for sanity
+
     }
 }

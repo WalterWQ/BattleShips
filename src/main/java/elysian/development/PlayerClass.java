@@ -3,7 +3,7 @@ package elysian.development;
 import java.util.*;
 
 
-public class Class {
+public class PlayerClass {
 
     public enum ClassType {
         STEALTH,
@@ -21,7 +21,7 @@ public class Class {
     private double shipSizeModifier;
     private int attackCooldownTurns;
 
-    public Class(int selected) {
+    public PlayerClass(int selected) {
         this.weapons = new ArrayList<>();
         switch (selected) {
             case 1:
