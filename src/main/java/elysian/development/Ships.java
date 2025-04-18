@@ -61,18 +61,18 @@ public class Ships {
         }
     }
 
-    public static void placePlayerShip(Scanner scanner, Board board, int length) {
+    public static void placePlayerShip(Scanner userInput, Board board, int length) {
         boolean placed = false;
 
         while (!placed) {
             System.out.print("Enter starting row (1–" + board.getHeight() + "): ");
-            int row = scanner.nextInt() - 1;
+            int row = Utils.getValidChoice(Utils.makeRange(1, board.getHeight()), userInput) - 1;
 
             System.out.print("Enter starting column (1–" + board.getWidth() + "): ");
-            int col = scanner.nextInt() - 1;
+            int col = Utils.getValidChoice(Utils.makeRange(1, board.getWidth()), userInput) - 1;
 
             System.out.print("Vertical? (true/false): ");
-            boolean vertical = scanner.nextBoolean();
+            boolean vertical = userInput.nextBoolean();
 
             if (board.canPlaceShip(row, col, length, vertical)) {
                 board.placeShip(row, col, length, vertical, 'S');

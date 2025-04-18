@@ -76,19 +76,50 @@ public class PlayerClass {
             case STEALTH:
                 return new int[]{1}; // Small, sneaky ships
             case HEAVY_DUTY:
-                return new int[]{3, 3, 3, 3, 3}; // Tank fleet
+                return new int[]{1}; // Tank fleet
             case FIGHTER:
-                return new int[]{4, 3, 3, 2, 2}; // Balanced attack fleet
+                return new int[]{1}; // Balanced attack fleet
             case AIR_DEFENSE:
-                return new int[]{4, 3, 3, 2, 1}; // Mid-size with utility
+                return new int[]{1}; // Mid-size with utility
             default:
-                return new int[]{5, 4, 3, 3, 2}; // Fallback standard
+                return new int[]{1}; // Fallback standard
+        }
+    }
+
+    public List<Weapons> getWeapons() {
+        switch (type) {
+            case STEALTH -> {
+                return List.of(
+                        new Weapons("Torpedo", 1, false, false),
+                        new Weapons("Sniper", 3, false, false)
+                );
+            }
+            case HEAVY_DUTY -> {
+                return List.of(
+                        new Weapons("Torpedo", 1, false, false),
+                        new Weapons("Missile", 2, true, false)
+                );
+            }
+            case FIGHTER -> {
+                return List.of(
+                        new Weapons("Torpedo", 1, false, true),
+                        new Weapons("Gatling Gun", 3, true, true)
+                );
+            }
+            case AIR_DEFENSE -> {
+                return List.of(
+                        new Weapons("Torpedo", 1, false, false),
+                        new Weapons("Sonar", 1, false, false)
+                );
+            }
+            default -> {
+                return List.of(new Weapons("Torpedo", 1, false, false));
+            }
         }
     }
 
     public ClassType getType() { return type; }
     public List<String> getShips() { return ships; }
-    public List<Weapons> getWeapons() { return weapons; }
     public int getMissileRadius() { return missileRadius; }
     public boolean hasStealth() { return hasStealth; }
     public boolean hasAirDefense() { return hasAirDefense; }

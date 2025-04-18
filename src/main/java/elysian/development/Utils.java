@@ -22,6 +22,14 @@ public class Utils {
         }
     }
 
+    public static int[] makeRange(int min, int max) {
+        int[] range = new int[max - min + 1];
+        for (int i = 0; i < range.length; i++) {
+            range[i] = min + i;
+        }
+        return range;
+    }
+
     public static boolean isValidGridCoord(int row, int col, char[][] grid) {
         return row >= 0 && row < grid.length && col >= 0 && col < grid[0].length;
     }
