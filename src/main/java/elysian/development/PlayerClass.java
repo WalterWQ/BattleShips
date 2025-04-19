@@ -27,7 +27,7 @@ public class PlayerClass {
             case 1:
                 this.type = ClassType.STEALTH;
                 this.ships = Arrays.asList("Mini Sub", "Silent Cruiser");
-                this.weapons.add(new Weapons("Torpedo", 1, false, false));
+                this.weapons.add(new Weapons("Torpedo", 0, false, false,0));
                 this.missileRadius = 1;
                 this.hasStealth = true;
                 this.hasAirDefense = false;
@@ -37,8 +37,8 @@ public class PlayerClass {
             case 2:
                 this.type = ClassType.HEAVY_DUTY;
                 this.ships = Arrays.asList("Battleship", "Destroyer");
-                this.weapons.add(new Weapons("Cannon", 1, false, false));
-                this.weapons.add(new Weapons("Missile", 2, true, false));
+                this.weapons.add(new Weapons("Cannon", 0, false, false,0));
+                this.weapons.add(new Weapons("Missile", 1, true, false,1));
                 this.missileRadius = 2;
                 this.hasStealth = false;
                 this.hasAirDefense = false;
@@ -48,7 +48,7 @@ public class PlayerClass {
             case 3:
                 this.type = ClassType.FIGHTER;
                 this.ships = Arrays.asList("Gunboat", "Assault Ship");
-                this.weapons.add(new Weapons("Rapid Torpedo", 1, false, true));
+                this.weapons.add(new Weapons("Rapid Torpedo", 1, false, true, 1));
                 this.missileRadius = 1;
                 this.hasStealth = false;
                 this.hasAirDefense = false;
@@ -58,8 +58,8 @@ public class PlayerClass {
             case 4:
                 this.type = ClassType.AIR_DEFENSE;
                 this.ships = Arrays.asList("Radar Ship", "AA Frigate");
-                this.weapons.add(new Weapons("Anti-Air Missile", 1, true, false));
-                this.weapons.add(new Weapons("Sonar Ping", 0, false, false)); // utility
+                this.weapons.add(new Weapons("Anti-Air Missile", 1, false, false, 1));
+                this.weapons.add(new Weapons("Sonar Ping", 2, false, false, 1)); // utility
                 this.missileRadius = 1;
                 this.hasStealth = false;
                 this.hasAirDefense = true;
@@ -87,35 +87,7 @@ public class PlayerClass {
     }
 
     public List<Weapons> getWeapons() {
-        switch (type) {
-            case STEALTH -> {
-                return List.of(
-                        new Weapons("Torpedo", 1, false, false),
-                        new Weapons("Sniper", 3, false, false)
-                );
-            }
-            case HEAVY_DUTY -> {
-                return List.of(
-                        new Weapons("Torpedo", 1, false, false),
-                        new Weapons("Missile", 2, true, false)
-                );
-            }
-            case FIGHTER -> {
-                return List.of(
-                        new Weapons("Torpedo", 1, false, true),
-                        new Weapons("Gatling Gun", 3, true, true)
-                );
-            }
-            case AIR_DEFENSE -> {
-                return List.of(
-                        new Weapons("Torpedo", 1, false, false),
-                        new Weapons("Sonar", 1, false, false)
-                );
-            }
-            default -> {
-                return List.of(new Weapons("Torpedo", 1, false, false));
-            }
-        }
+        return weapons;
     }
 
     public ClassType getType() { return type; }
