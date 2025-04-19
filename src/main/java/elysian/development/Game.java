@@ -5,10 +5,13 @@ import jdk.jshell.execution.Util;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class Game {
 
     Scanner userInput = new Scanner(System.in);
+    static Stack<Move> playerMoveHistory = new Stack<>();
+    static Stack<Move> aiMoveHistory = new Stack<>();
     static int selectedDifficulty = 0;
     static int selectedClass = 0;
 
