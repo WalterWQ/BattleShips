@@ -86,6 +86,41 @@ public class Game {
             System.out.println("AI TURN");
             aiTurn(playerBoard, enemyBoard);
 
+
+            System.out.print("Undo last turn (you + AI) yes/no: ");
+            String undoFull = userInput.next().trim().toLowerCase();
+
+            if (undoFull.equals("yes")) {
+                if (!playerMoveHistory.isEmpty()) {
+                    Move lastPlayer = playerMoveHistory.pop();
+                    int r = lastPlayer.getRow();
+                    int c = lastPlayer.getCol();
+                    char prev = lastPlayer.getPreviousTile();
+
+                    // Restore both maps
+                    enemyBoard.getGrid()[r][c] = prev;
+                    playerBoard.getGrid()[r][c] = '~';
+                    System.out.println("Reverted player's move at (" + (r + 1) + "," + (c + 1) + ")");
+                }
+
+                // Undo AI's last move
+                if (!aiMoveHistory.isEmpty()) {
+                    Move lastAI = aiMoveHistory.pop();
+                    int r = lastAI.getRow();
+                    int c = lastAI.getCol();
+                    char prev = lastAI.getPreviousTile();
+
+                    // Restore both maps
+                    playerBoard.getGrid()[r][c] = prev;
+                    enemyBoard.getGrid()[r][c] = '~';
+                    System.out.println("Reverted AI's move at (" + (r + 1) + "," + (c + 1) + ")");
+                }
+
+                continue;
+            }
+
+
+
             if (allShipsSunk(playerBoard, 'S')) {
                 System.out.println("AI WIN!");
                 break;
@@ -146,11 +181,19 @@ public class Game {
         }
 
         if (targetBoard.getGrid()[row][col] == 'E') {
+            boolean hit = true;
+            char previous = targetBoard.getGrid()[row][col];
+            playerMoveHistory.push(new Move(row, col, hit, previous));
+            String undo = userInput.next().trim().toLowerCase();
+
             System.out.println("HIT!");
             targetBoard.getGrid()[row][col] = 'X';
             attackerBoard.getGrid()[row][col] = 'X';
 
         } else {
+            boolean hit = false;
+            char previous = targetBoard.getGrid()[row][col];
+            playerMoveHistory.push(new Move(row, col, hit, previous));
             System.out.println("MISS!");
             targetBoard.getGrid()[row][col] = 'O';
             attackerBoard.getGrid()[row][col] = 'O';
@@ -181,10 +224,16 @@ public class Game {
         System.out.println("AI attacked row " + (row + 1) + ", column " + (col+1));
 
         if (targetBoard.getGrid()[row][col] == 'S') {
+            boolean hit = true;
+            char previous = targetBoard.getGrid()[row][col];
+            aiMoveHistory.push(new Move(row, col, hit, previous));
             System.out.println("HIT!");
             targetBoard.getGrid()[row][col] = 'X';
             attackerBoard.getGrid()[row][col] = 'X';
         } else {
+            boolean hit = false;
+            char previous = targetBoard.getGrid()[row][col];
+            aiMoveHistory.push(new Move(row, col, hit, previous));
             System.out.println("MISS!");
             targetBoard.getGrid()[row][col] = 'O';
             attackerBoard.getGrid()[row][col] = 'O';
@@ -212,18 +261,18 @@ public class Game {
 
                         // Prevent friendly fire
                         if (tile == 'S') {
-                            System.out.println("⚠️ Cannot fire on your own ship at (" + (r + 1) + "," + (c + 1) + ").");
+                            System.out.println("⚠Cannot fire on your own ship at (" + (r + 1) + "," + (c + 1) + ").");
                             continue; // Skip this tile
                         }
 
                         if (tile == 'E') {
                             board.getGrid()[r][c] = 'X';
                             attacker.getGrid()[r][c] = 'X';
-                            System.out.println("💥 Hit enemy at (" + (r + 1) + "," + (c + 1) + ").");
+                            System.out.println("Hit enemy at (" + (r + 1) + "," + (c + 1) + ").");
                         } else if (tile == '~') {
                             board.getGrid()[r][c] = 'O';
                             attacker.getGrid()[r][c] = 'O';
-                            System.out.println("💨 Miss at (" + (r + 1) + "," + (c + 1) + ").");
+                            System.out.println("Miss at (" + (r + 1) + "," + (c + 1) + ").");
                         }
                         // You can add more conditions if necessary (e.g., obstacles)
                     }
