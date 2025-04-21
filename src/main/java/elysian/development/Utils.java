@@ -49,4 +49,15 @@ public class Utils {
         }
     }
 
+    public static void clearBoard(Board board) {
+        char[][] grid = board.getGrid();
+        for (int row = 0; row < board.getHeight(); row++) {
+            for (int col = 0; col < board.getWidth(); col++) {
+                if (grid[row][col] == '#') {
+                    grid[row][col] = '~';
+                }
+            }
+        }
+    }
+
 }
